@@ -251,7 +251,7 @@ function updateProduct(product) {
                 divProductBlock.className = 'col-lg-6 col-md-12 product-block';
 
                 var aToAnotherPage = document.createElement('a');
-                aToAnotherPage.href = '/productDetails.html?c=' + categorykey + '&p=' + product['key'];
+                aToAnotherPage.href = '/product-details.html?c=' + categorykey + '&p=' + product['key'];
                 divProductBlock.appendChild(aToAnotherPage);
 
                 var divProductBlockItem = document.createElement('div');
@@ -284,7 +284,6 @@ function updateProduct(product) {
 }
 
 function updateProductDetail(productCategory, productKey) {
-    console.log("z");
     console.log(productCategory);
     var products = productList[productCategory]?.products;
     if (products != null && products != undefined) {
