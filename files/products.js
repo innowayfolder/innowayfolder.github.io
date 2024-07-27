@@ -251,7 +251,7 @@ function updateProduct(product) {
                 divProductBlock.className = 'col-lg-6 col-md-12 product-block';
 
                 var aToAnotherPage = document.createElement('a');
-                aToAnotherPage.href = '/product-details?c=' + categorykey + '&p=' + product['key'];
+                aToAnotherPage.href = '/productDetails.html?c=' + categorykey + '&p=' + product['key'];
                 divProductBlock.appendChild(aToAnotherPage);
 
                 var divProductBlockItem = document.createElement('div');
