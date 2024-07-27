@@ -202,6 +202,7 @@ const productList = {
 window.onload = (event) => {
     // get param
     var page = location.pathname.replace(/\//g, '');
+    page = page.substring(".")[0]
     var urlParam = location.href.split("?")[1]; //A string of all parameters in the URL
     if (urlParam != null && urlParam != undefined) {
         console.log("param is: " + urlParam);
@@ -217,9 +218,9 @@ window.onload = (event) => {
         });
         console.log("selected product name is: " + productName);
         console.log(page);
-        if (page == "products") {
+        if (page.includes("products")) {
             updateProduct(productName);
-        } else if (page == "product-details") {
+        } else if (page.includes("product-details")) {
             updateProductDetail(categoryName, productName);
         }
     } else {
