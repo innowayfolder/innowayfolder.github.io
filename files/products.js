@@ -202,7 +202,6 @@ const productList = {
 window.onload = (event) => {
     // get param
     var page = location.pathname.replace(/\//g, '');
-    page = page.substring(".")[0]
     var urlParam = location.href.split("?")[1]; //A string of all parameters in the URL
     if (urlParam != null && urlParam != undefined) {
         console.log("param is: " + urlParam);
