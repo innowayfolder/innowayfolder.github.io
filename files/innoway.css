@@ -370,10 +370,13 @@ body {
     margin: 0 0 6px 0;
 }
 
+.news-date {
+    margin: 0 0 12px 0;
+}
+
 .news-card .news-date {
     font-size: 0.85rem;
     color: #555;
-    margin: 0 0 10px 0;
 }
 
 .news-card .news-excerpt {
@@ -416,13 +419,13 @@ body {
 .news-article .news-date {
     font-size: 0.9rem;
     color: #666;
-    margin: 0 0 20px 0;
 }
 
 .news-article .news-body {
     font-size: clamp(0.95rem, 0.3vw + 0.9rem, 1.1rem);
     line-height: 1.75;
     color: #222;
+    margin-top: 1em;
 }
 
 .news-article .news-body p {
