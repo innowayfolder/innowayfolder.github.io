@@ -128,7 +128,7 @@ async function upsertArticle(article) {
         $2,
         $3,
         $4::VARCHAR(20),
-        CASE WHEN $5::DATE IS NOT NULL THEN $5::DATE::TIMESTAMP ELSE NULL END,
+        CASE WHEN $5::TEXT IS NOT NULL THEN $5::TIMESTAMP ELSE NULL END,
         CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP
       )
@@ -138,7 +138,7 @@ async function upsertArticle(article) {
         status = $4::VARCHAR(20),
         updated_at = CURRENT_TIMESTAMP,
         published_at = CASE
-          WHEN $5::DATE IS NOT NULL THEN $5::DATE::TIMESTAMP
+          WHEN $5::TEXT IS NOT NULL THEN $5::TIMESTAMP
           ELSE NULL
         END
       RETURNING article_id, title, content, status, created_at, updated_at, published_at
@@ -275,6 +275,22 @@ async function getAllArticles(includeAllStatuses = false) {
   return result.rows;
 }
 
+/**
+ * Delete an article by article_id
+ * Photos are deleted automatically via database ON DELETE CASCADE constraint
+ * @param {string} articleId - Article ID to delete
+ * @returns {Promise<number>} Number of articles deleted
+ */
+async function deleteArticleById(articleId) {
+  const text = `
+    DELETE FROM innoway.articles
+    WHERE article_id = $1
+  `;
+
+  const result = await query(text, [articleId]);
+  return result.rowCount;
+}
+
 module.exports = {
     findByUsername,
     createRefreshToken,
@@ -285,4 +301,5 @@ module.exports = {
     getArticleById,
   getArticlePhotosById,
     getAllArticles,
+    deleteArticleById,
 };

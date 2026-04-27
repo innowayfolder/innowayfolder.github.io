@@ -13,6 +13,7 @@ const {
   validateUpsertArticle,
   validateGetArticle,
   validateUploadPhoto,
+  validateDeleteArticle,
 } = require('./middleware/validate-request');
 const { validateToken } = require('./middleware/validate-token');
 const {
@@ -24,6 +25,7 @@ const {
   uploadArticlePhoto,
   getOneArticle,
   getArticles,
+  deleteArticle,
 } = require('./service');
 
 const REFRESH_TOKEN_COOKIE_NAME = process.env.REFRESH_TOKEN_COOKIE_NAME || 'refresh_token';
@@ -314,4 +316,19 @@ router.put('/photo', validateUploadPhoto, async (req, res, next) => {
     next(error);
   }
 });
+
+/**
+ * DELETE /api/v1/article?articleId=1
+ * Delete an article and its associated AWS files
+ */
+router.delete('/article', validateDeleteArticle, async (req, res, next) => {
+  try {
+    const { articleId } = req.query;
+    const result = await deleteArticle(articleId);
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -158,8 +158,64 @@ async function renameFolderInS3(oldArticleId, newArticleId) {
   }
 }
 
+/**
+ * Delete all files for an article from S3.
+ * Lists all files under articles/{articleId}/ and deletes them.
+ * Any list/delete failure is logged and never thrown.
+ * @param {string} articleId - Article identifier
+ * @returns {Promise<void>}
+ */
+async function deleteArticleFolderInS3(articleId) {
+  const bucketName = process.env.AWS_S3_BUCKET_NAME;
+  if (!bucketName || !articleId) {
+    return;
+  }
+
+  const prefix = `articles/${articleId}/`;
+  const keysToDelete = [];
+  let continuationToken;
+
+  try {
+    do {
+      const listResult = await s3Client.send(new ListObjectsV2Command({
+        Bucket: bucketName,
+        Prefix: prefix,
+        ContinuationToken: continuationToken,
+      }));
+
+      for (const objectItem of listResult.Contents || []) {
+        const key = objectItem.Key;
+        if (!key || key.endsWith('/')) {
+          continue;
+        }
+
+        keysToDelete.push(key);
+      }
+
+      continuationToken = listResult.IsTruncated ? listResult.NextContinuationToken : undefined;
+    } while (continuationToken);
+  } catch (error) {
+    console.error(`Failed to list S3 objects for article ${articleId}:`, error);
+    return;
+  }
+
+  await Promise.all(
+    keysToDelete.map(async (key) => {
+      try {
+        await s3Client.send(new DeleteObjectCommand({
+          Bucket: bucketName,
+          Key: key,
+        }));
+      } catch (error) {
+        console.error(`Failed to delete S3 object ${key}:`, error);
+      }
+    })
+  );
+}
+
 module.exports = {
   uploadToS3,
   deleteStaleArticlePhotosInS3,
   renameFolderInS3,
+  deleteArticleFolderInS3,
 };

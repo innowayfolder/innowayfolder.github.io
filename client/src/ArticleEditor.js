@@ -169,11 +169,7 @@ const ArticleEditor = () => {
     }
 
     const publishedAtToUse = publishedAt;
-
-    if (!publishedAtToUse || !/^\d{4}-\d{2}-\d{2}$/.test(publishedAtToUse)) {
-      setSubmitError('请选择有效的发布日期');
-      return;
-    }
+    const publishedAtTimestamp = `${publishedAtToUse} 08:00:00`;
 
     const delta = quillRef.current?.getContents();
     const content = JSON.stringify(delta?.ops || []);
@@ -205,7 +201,7 @@ const ArticleEditor = () => {
           title: trimmedTitle,
           content,
           status,
-          publishedAt: publishedAtToUse,
+          publishedAt: publishedAtTimestamp,
           photos: uploadedPhotos,
         }),
       });

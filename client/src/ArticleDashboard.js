@@ -56,6 +56,7 @@ const ArticleDashboard = () => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -79,6 +80,33 @@ const ArticleDashboard = () => {
   const handleLogout = async () => {
     await logout();
     navigate('/admin', { replace: true });
+  };
+
+  const handleDeleteArticle = async (article, event) => {
+    event.stopPropagation();
+    if (!article?.articleId || isDeleting) {
+      return;
+    }
+
+    const shouldDelete = window.confirm('确定要删除这篇文章吗？此操作无法撤销。');
+    if (!shouldDelete) {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      await authorizedRequest(`/article?articleId=${encodeURIComponent(article.articleId)}`, {
+        method: 'DELETE',
+      });
+
+      setArticles((previousArticles) => previousArticles
+        .filter((item) => item.articleId !== article.articleId));
+    } catch (err) {
+      window.alert(err.message || 'Failed to delete article');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const getStatusLabel = (status) => STATUS_LABELS[status] || status || '未知状态';
@@ -138,9 +166,19 @@ const ArticleDashboard = () => {
                       event.stopPropagation();
                       navigate(`/admin/editor/${article.articleId}`);
                     }}
-                    aria-label={`Edit ${article.title}`}
+                    aria-label={`编辑 ${article.title}`}
                   >
-                    Edit
+                    编辑
+                  </button>
+                  <button
+                    type="button"
+                    className="article-delete-button"
+                    onClick={(event) => handleDeleteArticle(article, event)}
+                    aria-label={`删除 ${article.title}`}
+                    title="删除文章"
+                    disabled={isDeleting}
+                  >
+                    🗑️
                   </button>
                   <span className="article-list-date">
                     {formatDisplayDate(article.publishedAt)}

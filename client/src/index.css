@@ -99,6 +99,60 @@ code {
 .btn-secondary {
   background: #e2e8f0;
   color: #1e293b;
+
+.btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(16, 24, 40, 0.15);
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.modal-content p {
+  margin: 0 0 16px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-actions .btn {
+  flex: 1;
+}
 }
 
 .page-loading {
@@ -228,9 +282,10 @@ code {
 }
 
 .article-list-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 64px 32px 128px;
   align-items: center;
-  gap: 12px;
+  column-gap: 10px;
 }
 
 .article-edit-button {
@@ -238,7 +293,8 @@ code {
   border-radius: 999px;
   background: #eff6ff;
   color: #1d4ed8;
-  padding: 6px 12px;
+  width: 64px;
+  height: 32px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -248,11 +304,36 @@ code {
   background: #dbeafe;
 }
 
+.article-delete-button {
+  border: 1px solid #fecaca;
+  border-radius: 999px;
+  background: #fef2f2;
+  color: #dc2626;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.article-delete-button:hover {
+  background: #fee2e2;
+}
+
 .article-list-date {
   font-size: 13px;
   color: #94a3b8;
   white-space: nowrap;
-  margin-left: 16px;
+  width: 80px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.modal-subtext {
+  font-size: 13px;
+  color: #64748b;
 }
 
 /* ---- Detail ---- */

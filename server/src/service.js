@@ -13,8 +13,9 @@ const {
   getArticleById,
   getArticlePhotosById,
   getAllArticles,
+  deleteArticleById,
 } = require('./repository');
-const { uploadToS3, deleteStaleArticlePhotosInS3, renameFolderInS3 } = require('./aws');
+const { uploadToS3, deleteStaleArticlePhotosInS3, renameFolderInS3, deleteArticleFolderInS3 } = require('./aws');
 /**
  * Authentication Service
  * Handles authentication business logic for registration, login, and token management
@@ -548,11 +549,15 @@ function normalizePublishedAt(publishedAt) {
     return null;
   }
 
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(trimmedPublishedAt)) {
-    throw new Error('publishedAt must be in YYYY-MM-DD format when provided');
+  const dateOnlyMatch = /^\d{4}-\d{2}-\d{2}$/.test(trimmedPublishedAt);
+  const chinaTimestampMatch = /^\d{4}-\d{2}-\d{2} 08:00:00$/.test(trimmedPublishedAt);
+
+  if (!dateOnlyMatch && !chinaTimestampMatch) {
+    throw new Error('publishedAt must be in YYYY-MM-DD or YYYY-MM-DD 08:00:00 format when provided');
   }
 
-  const [year, month, day] = trimmedPublishedAt.split('-').map((value) => Number.parseInt(value, 10));
+  const datePortion = trimmedPublishedAt.slice(0, 10);
+  const [year, month, day] = datePortion.split('-').map((value) => Number.parseInt(value, 10));
   const normalizedDate = new Date(Date.UTC(year, month - 1, day));
 
   if (
@@ -564,7 +569,7 @@ function normalizePublishedAt(publishedAt) {
     throw new Error('publishedAt must be a valid calendar date when provided');
   }
 
-  return trimmedPublishedAt;
+  return `${datePortion} 08:00:00`;
 }
 
 /**
@@ -620,6 +625,43 @@ async function getArticles(includeAllStatuses = false) {
   }));
 }
 
+/**
+ * Delete an article and its associated AWS files
+ * @param {string} articleId - Article ID to delete
+ * @returns {Promise<Object>} Response indicating deletion
+ * @throws {Error} If article is not found
+ */
+async function deleteArticle(articleId) {
+  if (!articleId || typeof articleId !== 'string') {
+    throw new Error('articleId is required and must be a non-empty string');
+  }
+
+  // Check if article exists before attempting deletion
+  const article = await getArticleById(articleId, true);
+  if (!article) {
+    const error = new Error('Article not found');
+    error.code = 'NOT_FOUND';
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Delete from database
+  const deletedCount = await deleteArticleById(articleId);
+
+  // Delete associated files from S3
+  try {
+    await deleteArticleFolderInS3(articleId);
+  } catch (error) {
+    console.error(`Failed to delete S3 files for article ${articleId}:`, error);
+  }
+
+  return {
+    success: true,
+    message: 'Article deleted successfully',
+    articleId: articleId,
+  };
+}
+
 module.exports = {
   loginWithUsername,
   refreshTokens,
@@ -630,4 +672,5 @@ module.exports = {
   uploadArticlePhoto,
   getOneArticle,
   getArticles,
+  deleteArticle,
 };

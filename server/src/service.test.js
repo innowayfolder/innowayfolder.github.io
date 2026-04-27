@@ -13,6 +13,7 @@ jest.mock('./repository', () => ({
 jest.mock('./aws', () => ({
   uploadToS3: jest.fn(),
   deleteStaleArticlePhotosInS3: jest.fn(),
+  renameFolderInS3: jest.fn(),
 }));
 
 const { uploadToS3, deleteStaleArticlePhotosInS3 } = require('./aws');
@@ -46,7 +47,7 @@ describe('upsertArticle', () => {
     ], '2026-04-26');
 
     expect(upsertArticleRecord).toHaveBeenCalledWith(expect.objectContaining({
-      publishedAt: '2026-04-26',
+      publishedAt: '2026-04-26 08:00:00',
     }));
     expect(deleteStaleArticlePhotosInS3).toHaveBeenCalledWith('article-1', ['keep-1.jpg', 'keep-2.jpg']);
     expect(result).toBe(upsertedArticle);

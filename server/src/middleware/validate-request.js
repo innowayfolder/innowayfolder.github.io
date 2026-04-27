@@ -111,8 +111,8 @@ const validateUpsertArticle = [
     .isString()
     .withMessage('publishedAt must be a string when provided')
     .bail()
-    .matches(/^\d{4}-\d{2}-\d{2}$/)
-    .withMessage('publishedAt must be in YYYY-MM-DD format when provided'),
+    .matches(/^(\d{4}-\d{2}-\d{2}|\d{4}-\d{2}-\d{2} 08:00:00)$/)
+    .withMessage('publishedAt must be in YYYY-MM-DD or YYYY-MM-DD 08:00:00 format when provided'),
 
   body('photos')
     .optional({ values: 'undefined' })
@@ -189,6 +189,18 @@ const validateUploadPhoto = [
   },
 ];
 
+/**
+ * Validation schema for delete article endpoint
+ */
+const validateDeleteArticle = [
+  query('articleId')
+    .trim()
+    .notEmpty()
+    .withMessage('articleId is required and must be a non-empty string'),
+
+  handleValidationErrors,
+];
+
 
 module.exports = {
   validateLogin,
@@ -197,4 +209,5 @@ module.exports = {
   validateUpsertArticle,
   validateGetArticle,
   validateUploadPhoto,
+  validateDeleteArticle,
 };
