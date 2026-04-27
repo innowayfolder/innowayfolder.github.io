@@ -17,3 +17,10 @@ backend:
 - admin login API
 - file upload to AWS
 - DB operations
+
+
+
+Heroku certificate set up guide:
+must manually set up on free plan (on Heroku, and on Cloudflare)
+
+
