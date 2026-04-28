@@ -261,7 +261,7 @@ body {
 
 .home-intro {
     text-align: center;
-    font-size: clamp(1.1rem, 1.5vw + 0.7rem, 1.7rem);
+    font-size: clamp(1.05rem, 1.4vw + 0.65rem, 1.6rem);
     line-height: 1.35;
     font-weight: 600;
     margin-bottom: 14px;
