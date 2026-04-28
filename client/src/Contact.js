@@ -11,7 +11,7 @@ const Contact = () => {
                 <div className="collapse navbar-collapse" id="navbar-collapse">
                     <ul className="navbar-nav me-auto nav-fill w-100">
                         <li className="nav-item">
-                            <a className="nav-link" href="/">About Us</a>
+                            <a className="nav-link" href="/about">About Us</a>
                         </li>
                         <li id="myDropdown" className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" aria-current="page" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

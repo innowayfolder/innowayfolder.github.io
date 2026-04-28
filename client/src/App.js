@@ -7,18 +7,12 @@ import ArticleDetail from './ArticleDetail';
 import ArticleEditor from './ArticleEditor';
 import Home from './Home';
 import News from './News';
+import About from './About';
 import NewsDetail from './NewsDetail';
 import Contact from './Contact';
 import Products from './Products';
 import ProductDetails from './ProductDetails';
 
-const StaticPageRedirect = ({ to }) => {
-  useEffect(() => {
-    window.location.replace(to);
-  }, [to]);
-
-  return null;
-};
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -145,6 +139,7 @@ const App = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/news" element={<News />} />
+    <Route path="/about" element={<About />} />
     <Route path="/news/:articleId" element={<NewsDetail />} />
     <Route path="/contact" element={<Contact />} />
     <Route path="/products" element={<Products />} />
