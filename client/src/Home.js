@@ -70,8 +70,8 @@ const Home = () => {
                         Innoway has specialized in feeders, ironers, and folders for more than 20 years.
                     </div>
                     <div className="about-image home-image-group col-lg-6 order-lg-1 col-md-12 order-2">
-                        <img src={process.env.PUBLIC_URL + '/files/home1.png'} alt="Home1" />
-                        <img src={process.env.PUBLIC_URL + '/files/home2.png'} alt="Home2" />
+                        <img src={process.env.PUBLIC_URL + '/files/home1.jpg'} alt="Home1" />
+                        <img src={process.env.PUBLIC_URL + '/files/home2.jpg'} alt="Home2" />
                     </div>
                 </div>
             </div>
