@@ -1,6 +1,22 @@
 # Node build artifacts
 node_modules
-npm-debug.log
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build output
+client/build/
+.netlify/
+
+# Secrets — never commit these.
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.p12
+*.key
+id_rsa*
 
 # Local development
 *.env
@@ -11,5 +27,9 @@ npm-debug.log
 Dockerfile
 docker-compose.yml
 *.docx
+
+# Editor
+.vscode/
+.idea/
 
 client/build
